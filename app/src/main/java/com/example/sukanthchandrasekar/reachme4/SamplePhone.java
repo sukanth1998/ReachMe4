@@ -18,9 +18,10 @@ public class SamplePhone extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_phone);
-        phone = findViewById(R.id.phone);
-        proceedphone = findViewById(R.id.proceedphone);
+        phone = (EditText) findViewById(R.id.phone);
+        proceedphone = (Button) findViewById(R.id.proceedphone);
         sharedPreferences = getSharedPreferences("ReachMe", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         if (sharedPreferences.contains("userKey")){
             startActivity(new Intent(SamplePhone.this,MainActivity.class));
             finish();
@@ -30,6 +31,7 @@ public class SamplePhone extends AppCompatActivity {
             public void onClick(View v) {
                 editor.putString("userKey",phone.getText().toString());
                 editor.putBoolean("login",true);
+                editor.commit();
                 startActivity(new Intent(SamplePhone.this,MainActivity.class));
                 finish();
             }

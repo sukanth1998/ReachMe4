@@ -7,6 +7,8 @@
     <string name="track" translatable="false">track</string>
     <string name="userDetails" translatable="false">userDetails</string>
     <string name="bloodbank">bloodBank</string>
+    <string name="alumni">alumni</string>
+    <string name="services">services</string>
 
     <!-- Firebase Authentication -->
     <string name="firebase_email" translatable="false">testusername@gmail.com</string>
@@ -23,4 +25,18 @@
     <string name="updatedetails">Update Details</string>
     <!--  Maps Activity -->
     <string name="title_activity_maps">Map</string>
+    <!--  Register Activity -->
+    <string name="Name">Name</string>
+    <string name="dob">Date of Birth</string>
+    <string name="EmailID">Email ID</string>
+    <string name="Gender">Gender</string>
+    <string name="Male">Male</string>
+    <string name="Female">Female</string>
+    <!--Select services-->
+    <string name="selectservives">Select services</string>
+    <string name="BloodBank">Blood Bank</string>
+    <string name="Alumni">Alumni</string>
+    <!--Search services-->
+    <string name="searchservives">Search services</string>
+    <string name="reachsomeone">Reach Someone</string>
 </resources>

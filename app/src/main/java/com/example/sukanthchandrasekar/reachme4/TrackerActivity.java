@@ -9,16 +9,17 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 public class TrackerActivity extends AppCompatActivity {
 
     private static final int PERMISSIONS_REQUEST = 1;
     String phoneNumber;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tracker);
         Intent intent = getIntent();
         phoneNumber = intent.getStringExtra("phone");
         // Check GPS is enabled
@@ -40,8 +41,10 @@ public class TrackerActivity extends AppCompatActivity {
                     PERMISSIONS_REQUEST);
         }
     }
+
     private void startTrackerService() {
         startService(new Intent(this, TrackerService.class));
+        Log.d("paapu","Start Tracker Service");
         finish();
     }
 

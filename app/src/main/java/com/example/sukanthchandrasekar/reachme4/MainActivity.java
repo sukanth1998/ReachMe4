@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        update = (Button)findViewById(R.id.phoneButton);
+        update = (Button)findViewById(R.id.updatedetails);
         track = (Button)findViewById(R.id.track);
         search = (Button)findViewById(R.id.search);
         update.setOnClickListener(new View.OnClickListener() {
@@ -32,17 +32,13 @@ public class MainActivity extends AppCompatActivity {
         track.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,TrackerActivity.class);
-                intent.putExtra("phone",phoneNumber);
-                startActivity(intent);
+                startActivity(new Intent(MainActivity.this,TrackerActivity.class));
             }
         });
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,MapsActivity.class);
-                intent.putExtra("phone",phoneNumber);
-                startActivity(intent);
+                startActivity(new Intent(MainActivity.this,MapsActivity.class));
             }
         });
     }

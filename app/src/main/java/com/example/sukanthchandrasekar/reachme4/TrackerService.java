@@ -1,5 +1,4 @@
 package com.example.sukanthchandrasekar.reachme4;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -12,31 +11,46 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.Manifest;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-
+import android.widget.Toast;
 
 public class TrackerService extends Service {
     private static final String TAG = "paapu";
-
+    SharedPreferences sharedPreferences;
+    String userKey="default";
     @Override
     public IBinder onBind(Intent intent) {return null;}
 
     @Override
     public void onCreate() {
         super.onCreate();
-        buildNotification();
+        sharedPreferences = getSharedPreferences("ReachMe",Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("userKey")){
+            userKey = sharedPreferences.getString("userKey","default");
+        }
+        Log.d("paapu","Service entered: "+userKey);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
+            Toast.makeText(getApplicationContext(),"You are sharing your location",Toast.LENGTH_SHORT).show();
+        else
+            buildNotification();
         loginToFirebase();
     }
 
@@ -55,10 +69,11 @@ public class TrackerService extends Service {
         startForeground(1, builder.build());
     }
 
+
     protected BroadcastReceiver stopReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "TrackerService - Received stop broadcast");
+            Log.d(TAG, "received stop broadcast");
             // Stop the service when the notification is tapped
             unregisterReceiver(stopReceiver);
             stopSelf();
@@ -74,10 +89,10 @@ public class TrackerService extends Service {
             @Override
             public void onComplete(Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Log.d(TAG, "Service - Firebase auth success");
+                    Log.d(TAG, "firebase auth success");
                     requestLocationUpdates();
                 } else {
-                    Log.d(TAG, "Service - firebase auth failed");
+                    Log.d(TAG, "firebase auth failed");
                 }
             }
         });
@@ -89,13 +104,12 @@ public class TrackerService extends Service {
         request.setFastestInterval(5000);
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
-        final String path = getString(R.string.firebase_path) + "/" + getString(R.string.track) + "/" + getString(R.string.bloodbank) + "/ " + "9940239793";
+        final String path = getString(R.string.firebase_path) + "/" + getString(R.string.track) + "/" + getString(R.string.bloodbank) + "/" + userKey;
         int permission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
         if (permission == PackageManager.PERMISSION_GRANTED) {
             // Request location updates and when an update is
             // received, store the location in Firebase
-            Log.d(TAG, "Service - Requesting Location");
             client.requestLocationUpdates(request, new LocationCallback() {
                 @Override
                 public void onLocationResult(LocationResult locationResult) {
